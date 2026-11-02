@@ -15,9 +15,8 @@
   
   <style>
     :root {
-      --card-opacity: 0.8;
+      --card-opacity: 0.85;
       --card-blur: 12px;
-      --bg-blur: 0px;
       --bg-overlay: rgba(15, 23, 42, 0.85);
       --bg-image: none;
     }
@@ -39,7 +38,6 @@
       background-image: var(--bg-image);
       background-size: cover;
       background-position: center;
-      filter: blur(var(--bg-blur));
     }
 
     #app-overlay {
@@ -63,8 +61,15 @@
       border-top: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 5.5rem); }
-    .pt-safe { padding-top: env(safe-area-inset-top); }
+    /* Margen superior para evitar el notch / reloj / batería del iPhone */
+    .header-safe {
+      padding-top: max(env(safe-area-inset-top), 2.5rem);
+    }
+
+    /* Margen inferior para no solapar la barra de navegación */
+    .pb-safe { 
+      padding-bottom: max(calc(env(safe-area-inset-bottom) + 6rem), 6.5rem); 
+    }
 
     .hide-scrollbar::-webkit-scrollbar { display: none; }
   </style>
@@ -77,13 +82,13 @@
   <!-- Contenedor Principal -->
   <div class="max-w-md mx-auto min-h-screen flex flex-col justify-between relative pb-safe">
     
-    <!-- Cabecera -->
-    <header class="p-4 pt-safe flex justify-between items-center glass-card rounded-b-2xl mb-4 sticky top-0 z-30">
+    <!-- Cabecera ajustada hacia abajo -->
+    <header class="p-4 header-safe flex justify-between items-center glass-card rounded-b-2xl mb-4 sticky top-0 z-30">
       <div>
         <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">FitTracker</h1>
         <p id="current-date" class="text-xs text-slate-400 capitalize"></p>
       </div>
-      <button onclick="toggleSettingsModal()" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-slate-300 hover:text-white active:scale-95 transition">
+      <button type="button" onclick="toggleSettingsModal()" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-slate-300 hover:text-white active:scale-95 transition">
         <i class="fa-solid font-bold fa-palette text-indigo-400"></i>
       </button>
     </header>
@@ -93,7 +98,7 @@
       <div class="glass-card p-4 rounded-2xl">
         <div class="flex justify-between items-center mb-3">
           <h2 class="font-semibold text-lg flex items-center gap-2"><i class="fa-solid fa-pills text-indigo-400"></i> Suplementos</h2>
-          <button onclick="openAddSuppModal()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1">
+          <button type="button" onclick="openAddSuppModal()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1">
             <i class="fa-solid fa-plus"></i> Añadir
           </button>
         </div>
@@ -113,119 +118,4 @@
             <select id="gym-category" onchange="updateExerciseOptions()" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none text-slate-200">
               <option value="pecho">Pecho</option>
               <option value="espalda">Espalda</option>
-              <option value="piernas">Piernas</option>
-              <option value="hombros">Hombros</option>
-              <option value="brazos">Brazos (Biceps/Triceps)</option>
-              <option value="core">Core / Abdomen</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-xs text-slate-400 block mb-1">Ejercicio</label>
-            <select id="gym-exercise" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none text-slate-200"></select>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="text-xs text-slate-400 block mb-1">Series</label>
-              <input type="number" id="gym-sets" value="4" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none text-slate-200">
-            </div>
-            <div>
-              <label class="text-xs text-slate-400 block mb-1">Repeticiones</label>
-              <input type="number" id="gym-reps" value="10" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none text-slate-200">
-            </div>
-          </div>
-
-          <div>
-            <label class="text-xs text-slate-400 block mb-1">Peso (kg)</label>
-            <input type="number" id="gym-weight" placeholder="Ej: 60" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none text-slate-200">
-          </div>
-
-          <button onclick="saveWorkout()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-xl transition text-sm">
-            Guardar Serie
-          </button>
-        </div>
-      </div>
-
-      <div class="glass-card p-4 rounded-2xl">
-        <h3 class="font-semibold text-sm text-slate-300 mb-3">Entrenamiento de Hoy</h3>
-        <div id="workout-log" class="space-y-2"></div>
-      </div>
-    </main>
-
-    <!-- Vista 3: Actividad -->
-    <main id="view-activity" class="tab-view px-4 space-y-4 hidden">
-      <div class="glass-card p-4 rounded-2xl">
-        <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-solid fa-shoe-prints text-cyan-400"></i> Pasos y Cardio</h2>
-        
-        <div class="space-y-3">
-          <div>
-            <label class="text-xs text-slate-400 block mb-1">Pasos de Hoy</label>
-            <div class="flex gap-2">
-              <input type="number" id="activity-steps" placeholder="Ej: 10000" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none text-slate-200">
-              <button onclick="saveSteps()" class="bg-cyan-600 hover:bg-cyan-500 px-4 rounded-xl text-xs font-semibold transition">Guardar</button>
-            </div>
-          </div>
-          
-          <div class="pt-2">
-            <div class="flex justify-between text-xs text-slate-400 mb-1">
-              <span>Objetivo Diario</span>
-              <span id="steps-progress-text">0 / 10.000</span>
-            </div>
-            <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
-              <div id="steps-bar" class="bg-cyan-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sueño (Estilo Samsung Health 1-100) -->
-      <div class="glass-card p-4 rounded-2xl">
-        <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-solid fa-moon text-purple-400"></i> Control de Sueño</h2>
-        
-        <div class="space-y-4">
-          <div>
-            <label class="text-xs text-slate-400 block mb-1">Horas Dormidas</label>
-            <input type="number" step="0.5" id="sleep-hours" placeholder="Ej: 7.5" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none text-slate-200">
-          </div>
-
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label class="text-xs text-slate-400">Puntuación del Sueño (1 - 100)</label>
-              <span id="sleep-score-badge" class="text-xs font-bold px-2 py-0.5 rounded-md bg-purple-900/60 text-purple-300">75 - Buena 🙂</span>
-            </div>
-            <input type="range" id="sleep-score-slider" min="1" max="100" value="75" oninput="updateSleepCategory(this.value)" class="w-full accent-purple-500">
-          </div>
-
-          <button onclick="saveSleep()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-medium py-2.5 rounded-xl transition text-sm">
-            Registrar Sueño
-          </button>
-        </div>
-      </div>
-    </main>
-
-    <!-- Barra de Navegación Inferior Fija -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass-nav rounded-t-2xl px-6 py-3 z-40 flex justify-around items-center">
-      <button onclick="switchTab('supplements')" id="nav-supplements" class="flex flex-col items-center gap-1 text-indigo-400">
-        <i class="fa-solid fa-pills text-lg"></i>
-        <span class="text-[10px] font-medium">Suplementos</span>
-      </button>
-      
-      <button onclick="switchTab('gym')" id="nav-gym" class="flex flex-col items-center gap-1 text-slate-400">
-        <i class="fa-solid fa-dumbbell text-lg"></i>
-        <span class="text-[10px] font-medium">Gimnasio</span>
-      </button>
-
-      <button onclick="switchTab('activity')" id="nav-activity" class="flex flex-col items-center gap-1 text-slate-400">
-        <i class="fa-solid fa-chart-line text-lg"></i>
-        <span class="text-[10px] font-medium">Actividad</span>
-      </button>
-    </nav>
-  </div>
-
-  <!-- Modal Apariencia y Ajustes -->
-  <div id="settings-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
-    <div class="glass-card w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto hide-scrollbar border-t border-slate-700">
-      
-      <div class="flex justify-between items-center border-b border-slate-700 pb-3">
-        <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-sliders text-indigo-400">
+              <option value="piernas">Pier
