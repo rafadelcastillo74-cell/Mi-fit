@@ -68,7 +68,7 @@
       border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 4rem); }
+    .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 5rem); }
     .pt-safe { padding-top: env(safe-area-inset-top); }
 
     .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -116,4 +116,199 @@
         <div class="space-y-3">
           <div>
             <label class="text-xs text-slate-400 block mb-1">Grupo Muscular</label>
-            <select id="gym-category" onchange="updateExerciseOptions()" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-indigo-5
+            <select id="gym-category" onchange="updateExerciseOptions()" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-indigo-500 text-slate-200">
+              <option value="pecho">Pecho</option>
+              <option value="espalda">Espalda</option>
+              <option value="piernas">Piernas</option>
+              <option value="hombros">Hombros</option>
+              <option value="brazos">Brazos (Biceps/Triceps)</option>
+              <option value="core">Core / Abdomen</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Ejercicio</label>
+            <select id="gym-exercise" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-indigo-500 text-slate-200"></select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-xs text-slate-400 block mb-1">Series</label>
+              <input type="number" id="gym-sets" value="4" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-indigo-500 text-slate-200">
+            </div>
+            <div>
+              <label class="text-xs text-slate-400 block mb-1">Repeticiones</label>
+              <input type="number" id="gym-reps" value="10" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-indigo-500 text-slate-200">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Peso (kg)</label>
+            <input type="number" id="gym-weight" placeholder="Ej: 60" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-indigo-500 text-slate-200">
+          </div>
+
+          <button onclick="saveWorkout()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-xl transition text-sm">
+            Guardar Serie
+          </button>
+        </div>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl">
+        <h3 class="font-semibold text-sm text-slate-300 mb-3">Entrenamiento de Hoy</h3>
+        <div id="workout-log" class="space-y-2"></div>
+      </div>
+    </main>
+
+    <!-- Vista 3: Actividad -->
+    <main id="view-activity" class="tab-view px-4 space-y-4 hidden">
+      <div class="glass-card p-4 rounded-2xl">
+        <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-solid fa-shoe-prints text-cyan-400"></i> Pasos y Cardio</h2>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Pasos de Hoy</label>
+            <div class="flex gap-2">
+              <input type="number" id="activity-steps" placeholder="Ej: 10000" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-cyan-500 text-slate-200">
+              <button onclick="saveSteps()" class="bg-cyan-600 hover:bg-cyan-500 px-4 rounded-xl text-xs font-semibold transition">Guardar</button>
+            </div>
+          </div>
+          
+          <div class="pt-2">
+            <div class="flex justify-between text-xs text-slate-400 mb-1">
+              <span>Objetivo Diario</span>
+              <span id="steps-progress-text">0 / 10.000</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+              <div id="steps-bar" class="bg-cyan-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sueño (Estilo Samsung Health) -->
+      <div class="glass-card p-4 rounded-2xl">
+        <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-solid fa-moon text-purple-400"></i> Control de Sueño</h2>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Horas Dormidas</label>
+            <input type="number" step="0.5" id="sleep-hours" placeholder="Ej: 7.5" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-2.5 text-sm focus:outline-none focus:border-purple-500 text-slate-200">
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-xs text-slate-400">Puntuación del Sueño (1 - 100)</label>
+              <span id="sleep-score-badge" class="text-xs font-bold px-2 py-0.5 rounded-md bg-purple-900/60 text-purple-300">75 - Buena</span>
+            </div>
+            <input type="range" id="sleep-score-slider" min="1" max="100" value="75" oninput="updateSleepCategory(this.value)" class="w-full accent-purple-500">
+          </div>
+
+          <button onclick="saveSleep()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-medium py-2.5 rounded-xl transition text-sm">
+            Registrar Sueño
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Barra de Navegación Inferior -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass-nav rounded-t-2xl px-6 py-3 z-30 flex justify-between items-center">
+      <button onclick="switchTab('supplements')" id="nav-supplements" class="flex flex-col items-center gap-1 text-indigo-400 transition">
+        <i class="fa-solid fa-pills text-lg"></i>
+        <span class="text-[10px] font-medium">Suplementos</span>
+      </button>
+      
+      <button onclick="switchTab('gym')" id="nav-gym" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 transition">
+        <i class="fa-solid fa-dumbbell text-lg"></i>
+        <span class="text-[10px] font-medium">Gimnasio</span>
+      </button>
+
+      <button onclick="switchTab('activity')" id="nav-activity" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 transition">
+        <i class="fa-solid fa-chart-line text-lg"></i>
+        <span class="text-[10px] font-medium">Actividad</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Modal Apariencia y Ajustes -->
+  <div id="settings-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="glass-card w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto hide-scrollbar border-t border-slate-700">
+      
+      <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+        <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-sliders text-indigo-400"></i> Ajustes y Personalización</h3>
+        <button onclick="toggleSettingsModal()" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+
+      <!-- Sección Foto de Fondo -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-semibold text-indigo-300 uppercase tracking-wider">Imagen de Fondo</h4>
+        
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Subir Foto desde Dispositivo</label>
+          <input type="file" id="bg-file-input" accept="image/*" onchange="handleImageUpload(event)" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer">
+        </div>
+
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">O Pegar Enlace (URL) de Imagen</label>
+          <div class="flex gap-2">
+            <input type="text" id="bg-url-input" placeholder="https://..." class="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-2 text-xs focus:outline-none">
+            <button onclick="applyBgUrl()" class="bg-indigo-600 px-3 rounded-xl text-xs font-medium">Aplicar</button>
+          </div>
+        </div>
+
+        <button onclick="removeBgImage()" class="w-full bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 text-xs py-1.5 rounded-xl transition border border-rose-800/50">
+          Quitar Fondo
+        </button>
+      </div>
+
+      <hr class="border-slate-800">
+
+      <!-- Ajustes Visibles -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-semibold text-indigo-300 uppercase tracking-wider">Transparencias y Efectos</h4>
+        
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-slate-400">Opacidad de Capa de Sombra</span>
+            <span id="val-overlay-op">85%</span>
+          </div>
+          <input type="range" min="0" max="100" value="85" oninput="updateStyle('overlayOpacity', this.value)" class="w-full accent-indigo-500">
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-slate-400">Transparencia de Tarjetas</span>
+            <span id="val-card-op">75%</span>
+          </div>
+          <input type="range" min="10" max="100" value="75" oninput="updateStyle('cardOpacity', this.value)" class="w-full accent-indigo-500">
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-slate-400">Desenfoque de Tarjetas (Glass)</span>
+            <span id="val-card-blur">12px</span>
+          </div>
+          <input type="range" min="0" max="30" value="12" oninput="updateStyle('cardBlur', this.value)" class="w-full accent-indigo-500">
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-slate-400">Desenfoque de Imagen de Fondo</span>
+            <span id="val-bg-blur">0px</span>
+          </div>
+          <input type="range" min="0" max="20" value="0" oninput="updateStyle('bgBlur', this.value)" class="w-full accent-indigo-500">
+        </div>
+      </div>
+
+      <hr class="border-slate-800">
+
+      <!-- Sección Copia de Seguridad -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-semibold text-indigo-300 uppercase tracking-wider">Copia de Seguridad y Reset</h4>
+        
+        <button onclick="exportBackup()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs py-2.5 rounded-xl transition border border-slate-700 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-download text-indigo-400"></i> Guardar Copia de Seguridad (JSON)
+        </button>
+
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Restaurar Datos desde Archivo</label>
+          <input type="file" accept=".json" on
