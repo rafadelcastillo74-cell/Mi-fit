@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101522">
+<meta name="description" content="Tu espacio personal para suplementos, gimnasio y descanso.">
+<link rel="manifest" href="manifest.webmanifest">
+<title>MY LIFE TRACKER</title>
+<style>
+:root{--bg:#101522;--panel:rgba(25,34,51,.88);--panel2:rgba(35,47,68,.78);--text:#f4f6fb;--muted:#aab5c7;--accent:#7c9cff;--line:rgba(255,255,255,.12);--radius:20px;--card-alpha:.88}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(8,12,20,var(--overlay,.45)),rgba(8,12,20,var(--overlay,.45))),var(--wallpaper,none);background-size:cover;background-position:center;z-index:-1}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1100px;margin:auto;padding:20px 16px 100px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 22px}.brand{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#7c9cff,#8d6bdb);display:grid;place-items:center;font-size:22px;font-weight:800}.brand h1{font-size:17px;letter-spacing:1.5px;margin:0}.brand small{color:var(--muted)}
+.pill{border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:8px 12px;color:var(--muted);font-size:12px}
+nav{display:flex;gap:8px;overflow:auto;padding:5px 0 15px;scrollbar-width:none}nav button{white-space:nowrap;border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:10px 14px;border-radius:13px}nav button.active{background:var(--accent);color:#101522;border-color:transparent;font-weight:750}
+h2{font-size:24px;margin:6px 0 4px}h3{margin:0 0 12px;font-size:17px}.sub{color:var(--muted);margin:0 0 20px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{grid-column:span 12;background:var(--panel);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 12px 35px rgba(0,0,0,.12)}.half{grid-column:span 6}.third{grid-column:span 4}.stat{font-size:30px;font-weight:800;letter-spacing:-1px}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:10px 14px;background:var(--accent);color:#101522;font-weight:750}.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.btn.danger{background:#713b4b;color:#fff}.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+input,select,textarea{width:100%;padding:11px 12px;background:rgba(5,10,18,.35);border:1px solid var(--line);border-radius:11px;color:var(--text);outline:none}select option{background:#182235}textarea{min-height:78px;resize:vertical}label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}.field{margin:0 0 12px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.item{padding:13px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0}.tag{font-size:11px;padding:4px 8px;border-radius:99px;background:var(--panel2);color:var(--muted);display:inline-block}.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
+.score{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;border:7px solid var(--accent);font-size:28px;font-weight:800;margin:6px auto 12px}.score small{font-size:10px;display:block;text-align:center;color:var(--muted)}
+.bottom{position:fixed;bottom:0;left:0;right:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(12,17,27,.86);backdrop-filter:blur(16px);border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:11px}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.cal-day{min-height:58px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--text);padding:6px 2px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px}.cal-day.dim{opacity:.35}.cal-day.selected{outline:2px solid var(--accent);background:rgba(124,156,255,.18)}.cal-day.today{font-weight:800}.cal-dots{display:flex;gap:3px;min-height:7px}.cal-dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}.cal-dot.gym{background:#e7b45d}.cal-dot.sleep{background:#69cbb0}.cal-daynum{font-size:13px}.cal-event{padding:12px 0;border-top:1px solid var(--line)}.cal-event:first-child{border-top:0}.cal-status{font-size:11px;color:var(--muted)}.hidden{display:none!important}.notice{padding:12px;border-radius:12px;background:rgba(124,156,255,.12);color:#cbd7ff;font-size:13px;margin:12px 0}.checkline{display:flex;align-items:center;gap:8px}.checkline input{width:auto}
+hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+@media(max-width:700px){.half,.third{grid-column:span 12}.app{padding:14px 12px 90px}h2{font-size:22px}.card{padding:15px}.formgrid{grid-template-columns:1fr}header{margin-bottom:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand"><div class="logo">M</div><div><h1>MY LIFE TRACKER</h1><small>Tu progreso, a tu manera</small></div></div><span class="pill" id="saveStatus">● Guardado local</span></header>
+<nav id="nav">
+<button class="active" data-tab="home">⌂ Inicio</button><button data-tab="calendar">▦ Calendario</button><button data-tab="supplements">＋ Suplementos</button><button data-tab="gym">◆ Gimnasio</button><button data-tab="sleep">☾ Sueño</button><button data-tab="style">✦ Apariencia</button><button data-tab="backup">↗ Copias</button>
+</nav>
+<main>
+<section id="home" class="tab">
+<h2>Tu resumen</h2><p class="sub" id="todayLine"></p>
+<div class="grid">
+<div class="card third"><div class="muted">Suplementos activos</div><div class="stat" id="homeSupp">0</div><div class="small">En tu planificación</div></div>
+<div class="card third"><div class="muted">Entrenamientos</div><div class="stat" id="homeGym">0</div><div class="small">Sesiones registradas</div></div>
+<div class="card third"><div class="muted">Último sueño</div><div class="stat" id="homeSleep">—</div><div class="small">Puntuación sobre 100</div></div>
+<div class="card half"><h3>Próximas tomas</h3><div id="homeTakes"></div></div>
+<div class="card half"><h3>Últimos entrenamientos</h3><div id="homeWorkouts"></div></div>
+</div></section>
+
+<section id="calendar" class="tab hidden">
+<h2>Calendario de hábitos</h2><p class="sub">Consulta cada día tus suplementos, entrenamientos y descanso. Toca un día para ver y completar lo previsto.</p>
+<div class="card">
+<div class="row" style="margin-bottom:14px"><button class="btn secondary" id="calPrev">‹</button><b id="calMonth"></b><button class="btn secondary" id="calNext">›</button></div>
+<div class="row" style="gap:6px;margin-bottom:8px;text-align:center"><span class="small" style="flex:1">L</span><span class="small" style="flex:1">M</span><span class="small" style="flex:1">X</span><span class="small" style="flex:1">J</span><span class="small" style="flex:1">V</span><span class="small" style="flex:1">S</span><span class="small" style="flex:1">D</span></div>
+<div id="calendarGrid" class="calendar-grid"></div>
+<div class="small" style="margin-top:12px">● Suplementos · ◆ Entrenamiento · ☾ Sueño</div>
+</div>
+<div class="card" style="margin-top:14px">
+<div class="row"><button class="btn secondary" id="calDayPrev">‹ Día</button><div style="text-align:center;flex:1"><b id="calSelectedLabel"></b><div class="small">Detalle del día seleccionado</div></div><button class="btn secondary" id="calDayNext">Día ›</button></div>
+<div id="calDayDetails" style="margin-top:14px"></div>
+</div>
+</section>
+
+<section id="supplements" class="tab hidden">
+<h2>Suplementos</h2><p class="sub">Organiza tus productos y registra cada toma.</p>
+<div class="grid"><div class="card half"><h3 id="suppFormTitle">Añadir suplemento</h3><form id="suppForm">
+<input type="hidden" id="suppId"><div class="field"><label>Nombre</label><input id="suppName" required placeholder="Ej. Magnesio"></div>
+<div class="formgrid"><div class="field"><label>Dosis</label><input id="suppDose" placeholder="Ej. 200 mg"></div><div class="field"><label>Frecuencia</label><select id="suppFreq"><option value="daily">Diariamente</option><option value="twice">2 veces al día</option><option value="every2">Cada 2 días</option><option value="every3">Cada 3 días</option><option value="weekly">Cada 7 días</option><option value="custom">Cada X días</option></select></div></div>
+<div class="field hidden" id="customFreqWrap"><label>Intervalo en días</label><input id="customFreq" type="number" min="1" max="365" value="4"></div>
+<div class="field"><label>Observaciones</label><textarea id="suppNotes" placeholder="Momento del día, indicaciones personales..."></textarea></div>
+<div class="actions"><button class="btn" type="submit">Guardar suplemento</button><button class="btn ghost hidden" type="button" id="cancelSupp">Cancelar</button></div></form></div>
+<div class="card half"><h3>Mi lista</h3><div id="suppList"></div></div></div>
+</section>
+
+<section id="gym" class="tab hidden">
+<h2>Gimnasio</h2><p class="sub">Registra ejercicios, series, repeticiones y cargas para seguir tu evolución.</p>
+<div class="grid"><div class="card half"><h3>Nueva sesión / ejercicio</h3>
+<div class="field"><label>Fecha</label><input type="date" id="gymDate"></div>
+<div class="field"><label>Buscar ejercicio</label><input id="exerciseSearch" placeholder="Filtra por nombre, músculo o equipo..."></div>
+<div class="field"><label>Ejercicio del catálogo</label><select id="exerciseSelect"></select></div>
+<div class="formgrid"><div class="field"><label>Peso (kg)</label><input id="setWeight" type="number" min="0" step=".5" placeholder="20"></div><div class="field"><label>Repeticiones</label><input id="setReps" type="number" min="1" step="1" placeholder="12"></div></div>
+<div class="actions"><button class="btn" id="addSet">Añadir serie</button><button class="btn secondary" id="finishExercise">Guardar ejercicio</button></div>
+<div class="notice" id="currentSets">Todavía no has añadido series.</div>
+</div>
+<div class="card half"><h3>Historial de entrenamientos</h3><div id="gymHistory"></div></div></div>
+</section>
+
+<section id="sleep" class="tab hidden">
+<h2>Descanso y sueño</h2><p class="sub">Registra tu puntuación y cómo has descansado cada noche.</p>
+<div class="grid"><div class="card half"><h3>Registrar noche</h3><form id="sleepForm">
+<div class="field"><label>Fecha de despertar</label><input type="date" id="sleepDate" required></div>
+<div class="formgrid"><div class="field"><label>Puntuación (1–100)</label><input id="sleepScore" type="number" min="1" max="100" required placeholder="85"></div><div class="field"><label>Horas dormidas</label><input id="sleepHours" type="number" min="0" max="24" step=".1" placeholder="7.5"></div></div>
+<div class="field"><label>Calidad percibida</label><select id="sleepQuality"><option>Muy buena</option><option>Buena</option><option>Regular</option><option>Mala</option></select></div>
+<div class="field"><label>Notas</label><textarea id="sleepNotes" placeholder="Despertares, sensación al levantarte..."></textarea></div><button class="btn">Guardar registro</button></form>
+<div class="notice">La puntuación es la que introduzcas desde Samsung Health u otra fuente. Esta app no mide el sueño automáticamente ni calcula métricas clínicas.</div></div>
+<div class="card half"><h3>Último registro</h3><div id="latestSleep" class="empty">Aún no hay registros.</div><hr><h3>Historial</h3><div id="sleepHistory"></div></div></div>
+</section>
+
+<section id="style" class="tab hidden">
+<h2>Apariencia</h2><p class="sub">Adapta el aspecto a tu gusto. Los cambios se guardan en este dispositivo.</p>
+<div class="grid"><div class="card half"><h3>Fondo de pantalla</h3><div class="field"><label>Seleccionar imagen del móvil</label><input type="file" id="wallpaperFile" accept="image/*"></div>
+<div class="field"><label>Intensidad de oscurecimiento</label><input type="range" id="overlayRange" min="0" max="90" value="45"></div>
+<div class="field"><label>Transparencia de tarjetas</label><input type="range" id="cardRange" min="25" max="100" value="88"></div>
+<div class="field"><label>Color de acento</label><input type="color" id="accentColor" value="#7c9cff"></div>
+<div class="actions"><button class="btn secondary" id="removeWallpaper">Quitar imagen</button><button class="btn secondary" id="resetStyle">Restablecer aspecto</button></div></div>
+<div class="card half"><h3>Vista previa</h3><div class="card" style="background:var(--panel2)"><div class="row"><b>Tu espacio personal</b><span class="tag">PREVIEW</span></div><p class="muted">Las tarjetas se adaptan al fondo y a la transparencia elegida.</p><button class="btn">Botón de ejemplo</button></div><p class="small">Consejo: utiliza una imagen vertical de buena calidad para que se vea bien en el móvil.</p></div></div>
+</section>
+
+<section id="backup" class="tab hidden">
+<h2>Datos y copias de seguridad</h2><p class="sub">Tus registros son privados y se almacenan en este navegador.</p>
+<div class="grid"><div class="card half"><h3>Exportar copia</h3><p class="muted">Descarga un archivo con tus suplementos, tomas, entrenamientos, sueño y preferencias.</p><button class="btn" id="exportBtn">Descargar copia de seguridad</button></div>
+<div class="card half"><h3>Restaurar copia</h3><p class="muted">Selecciona un archivo JSON exportado previamente. La restauración sustituye los datos actuales.</p><div class="field"><input type="file" id="importFile" accept=".json,application/json"></div><button class="btn secondary" id="importBtn">Restaurar datos</button></div>
+<div class="card"><h3>Almacenamiento</h3><p id="storageInfo" class="muted">Consultando almacenamiento...</p><button class="btn danger" id="clearAll">Borrar todos mis datos</button><div class="notice">Importante: los datos locales no se sincronizan entre dispositivos. Exporta copias periódicas y guárdalas en un lugar seguro.</div></div></div>
+</section>
+</main></div>
+<div class="bottom">MY LIFE TRACKER · Datos guardados en este dispositivo · Versión 1.0</div>
+<script>
+const DB_NAME='my-life-tracker-db', STORE='app', KEY='main';
+let db, state={supplements:[],takes:[],workouts:[],sleep:[],style:{overlay:45,card:88,accent:'#7c9cff',wallpaper:null}};
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=d=>new Date(d+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
+function openDB(){return new Promise((resolve,reject)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>r.result.createObjectStore(STORE);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
+function dbGet(){return new Promise((resolve,reject)=>{const r=db.transaction(STORE).objectStore(STORE).get(KEY);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
+function dbSet(v){return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(v,KEY);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
+async function save(){try{await dbSet(state);$('saveStatus').textContent='● Guardado local';renderHome()}catch(e){$('saveStatus').textContent='Error al guardar';console.error(e)}}
+const catalog=[
+['Press de banca con barra','Pecho','Barra'],['Press inclinado con barra','Pecho','Barra'],['Press de banca con mancuernas','Pecho','Mancuernas'],['Press inclinado con mancuernas','Pecho','Mancuernas'],['Aperturas con mancuernas','Pecho','Mancuernas'],['Cruce de poleas','Pecho','Poleas'],['Contractora / Pec deck','Pecho','Máquina'],['Flexiones','Pecho','Peso corporal'],
+['Jalón al pecho','Espalda','Poleas'],['Remo sentado en polea','Espalda','Poleas'],['Remo con barra','Espalda','Barra'],['Remo con mancuerna','Espalda','Mancuernas'],['Remo en máquina','Espalda','Máquina'],['Dominadas','Espalda','Peso corporal'],['Peso muerto','Espalda','Barra'],['Pullover en polea','Espalda','Poleas'],['Extensiones lumbares','Espalda','Peso corporal'],
+['Press militar con barra','Hombros','Barra'],['Press hombros con mancuernas','Hombros','Mancuernas'],['Elevaciones laterales','Hombros','Mancuernas'],['Elevaciones laterales en polea','Hombros','Poleas'],['Pájaros / deltoide posterior','Hombros','Mancuernas'],['Face pull','Hombros','Poleas'],['Máquina de hombros','Hombros','Máquina'],
+['Curl bíceps con barra','Bíceps','Barra'],['Curl alterno con mancuernas','Bíceps','Mancuernas'],['Curl martillo','Bíceps','Mancuernas'],['Curl predicador','Bíceps','Máquina'],['Curl en polea','Bíceps','Poleas'],
+['Extensión tríceps en polea','Tríceps','Poleas'],['Press francés','Tríceps','Barra'],['Extensión tríceps sobre cabeza','Tríceps','Mancuernas'],['Fondos','Tríceps','Peso corporal'],['Press cerrado','Tríceps','Barra'],
+['Sentadilla con barra','Piernas','Barra'],['Prensa de piernas','Piernas','Máquina'],['Extensión de cuádriceps','Piernas','Máquina'],['Curl femoral sentado','Piernas','Máquina'],['Curl femoral tumbado','Piernas','Máquina'],['Peso muerto rumano','Piernas','Barra'],['Zancadas con mancuernas','Piernas','Mancuernas'],['Sentadilla goblet','Piernas','Mancuernas'],['Hip thrust','Glúteos','Barra'],['Abductores','Glúteos','Máquina'],['Aductores','Piernas','Máquina'],['Elevación de gemelos','Piernas','Máquina'],['Sentadilla búlgara','Piernas','Mancuernas'],
+['Crunch abdominal','Abdominales','Peso corporal'],['Plancha','Abdominales','Peso corporal'],['Elevación de piernas','Abdominales','Peso corporal'],['Crunch en polea','Abdominales','Poleas'],['Rotación de torso','Abdominales','Máquina'],
+['Cinta de correr','Cardio','Máquina'],['Bicicleta estática','Cardio','Máquina'],['Elíptica','Cardio','Máquina'],['Remo ergómetro','Cardio','Máquina'],['Escaladora','Cardio','Máquina']
+].map((x,i)=>({id:'ex'+i,name:x[0],muscle:x[1],equipment:x[2]}));
+let pendingSets=[],pendingExercise=null;
+function switchTab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('hidden',x.id!==id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));}
+$('nav').addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(b)switchTab(b.dataset.tab)});
+function freqText(s){return ({daily:'Diariamente',twice:'2 veces al día',every2:'Cada 2 días',every3:'Cada 3 días',weekly:'Cada 7 días',custom:`Cada ${s.interval||4} días`})[s.freq]||'Personalizada'}
+function renderSupp(){const el=$('suppList');if(!state.supplements.length){el.innerHTML='<div class="empty">Todavía no has añadido suplementos.</div>';return}
+el.innerHTML=state.supplements.map(s=>`<div class="item"><div class="row"><div><b>${esc(s.name)}</b><div class="small">${esc(s.dose||'Sin dosis')} · ${freqText(s)}</div></div><span class="tag">${esc(s.notes||'Activo')}</span></div><div class="actions" style="margin-top:10px"><button class="btn" data-take="${s.id}">Registrar toma</button><button class="btn secondary" data-edit="${s.id}">Editar</button><button class="btn danger" data-del="${s.id}">Quitar</button></div></div>`).join('')+
+'<hr><h3>Últimas tomas</h3>'+ (state.takes.slice().reverse().slice(0,8).map(t=>{const s=state.supplements.find(x=>x.id===t.suppId);return `<div class="item"><b>${esc(s?.name||t.name)}</b><div class="small">${fmt(t.date)} · ${esc(t.time)}</div></div>`}).join('')||'<p class="muted">Sin tomas registradas.</p>');
+}
+$('suppList').addEventListener('click',async e=>{let b=e.target.closest('button');if(!b)return;let id=b.dataset.take||b.dataset.edit||b.dataset.del,s=state.supplements.find(x=>x.id===id);if(b.dataset.take){state.takes.push({id:uid(),suppId:id,name:s.name,date:today(),time:new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})});await save();renderSupp()}if(b.dataset.del&&confirm('¿Quitar este suplemento? Se conservará el historial de tomas.')){state.supplements=state.supplements.filter(x=>x.id!==id);await save();renderSupp()}if(b.dataset.edit){$('suppId').value=s.id;$('suppName').value=s.name;$('suppDose').value=s.dose||'';$('suppFreq').value=s.freq;$('customFreq').value=s.interval||4;$('suppNotes').value=s.notes||'';$('suppFormTitle').textContent='Editar suplemento';$('cancelSupp').classList.remove('hidden');$('customFreqWrap').classList.toggle('hidden',s.freq!=='custom');window.scrollTo({top:0,behavior:'smooth'})}});
+$('suppFreq').addEventListener('change',()=>$('customFreqWrap').classList.toggle('hidden',$('suppFreq').value!=='custom'));
+$('suppForm').addEventListener('submit',async e=>{e.preventDefault();let id=$('suppId').value;let obj={id:id||uid(),name:$('suppName').value.trim(),dose:$('suppDose').value.trim(),freq:$('suppFreq').value,interval:Number($('customFreq').value)||4,notes:$('suppNotes').value.trim(),startDate:id?(state.supplements.find(x=>x.id===id)?.startDate||today()):today()};if(id)state.supplements=state.supplements.map(x=>x.id===id?obj:x);else state.supplements.push(obj);e.target.reset();$('suppId').value='';$('suppFormTitle').textContent='Añadir suplemento';$('cancelSupp').classList.add('hidden');$('customFreqWrap').classList.add('hidden');await save();renderSupp();renderCalendar()});
+$('cancelSupp').onclick=()=>{$('suppForm').reset();$('suppId').value='';$('suppFormTitle').textContent='Añadir suplemento';$('cancelSupp').classList.add('hidden');$('customFreqWrap').classList.add('hidden')};
+function renderExercises(filter=''){let list=catalog.filter(x=>(x.name+' '+x.muscle+' '+x.equipment).toLowerCase().includes(filter.toLowerCase()));$('exerciseSelect').innerHTML=list.map(x=>`<option value="${x.id}">${x.name} · ${x.muscle} · ${x.equipment}</option>`).join('')||'<option value="">Sin resultados</option>'}
+$('exerciseSearch').oninput=e=>renderExercises(e.target.value);
+function showPending(){$('currentSets').innerHTML=pendingSets.length?pendingSets.map((s,i)=>`Serie ${i+1}: <b>${s.weight} kg × ${s.reps}</b> <button class="btn ghost" data-remove-set="${i}">Quitar</button>`).join('<br>'):'Todavía no has añadido series.'}
+$('addSet').onclick=()=>{let w=$('setWeight').value,r=$('setReps').value;if(w===''||!r||Number(r)<1){alert('Introduce el peso y las repeticiones.');return}pendingSets.push({weight:Number(w),reps:Number(r)});$('setWeight').value='';$('setReps').value='';showPending()};
+$('currentSets').onclick=e=>{let b=e.target.closest('[data-remove-set]');if(b){pendingSets.splice(Number(b.dataset.removeSet),1);showPending()}};
+$('finishExercise').onclick=async()=>{let ex=catalog.find(x=>x.id===$('exerciseSelect').value);if(!ex){alert('Selecciona un ejercicio.');return}if(!pendingSets.length){alert('Añade al menos una serie.');return}let date=$('gymDate').value||today();let workout=state.workouts.find(x=>x.date===date);if(!workout){workout={id:uid(),date,exercises:[]};state.workouts.push(workout)}workout.exercises.push({id:uid(),exerciseId:ex.id,name:ex.name,muscle:ex.muscle,equipment:ex.equipment,sets:pendingSets});pendingSets=[];showPending();await save();renderGym();renderCalendar();};
+function renderGym(){$('gymHistory').innerHTML=state.workouts.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(w=>`<div class="item"><b>${fmt(w.date)}</b>${w.exercises.map(ex=>`<div style="margin-top:8px"><b>${esc(ex.name)}</b><div class="small">${ex.sets.map(s=>`${s.weight} kg × ${s.reps}`).join(' · ')}</div></div>`).join('')}<div class="actions" style="margin-top:8px"><button class="btn danger" data-del-workout="${w.id}">Eliminar sesión</button></div></div>`).join('')||'<div class="empty">Aún no hay entrenamientos.</div>'}
+$('gymHistory').onclick=async e=>{let b=e.target.closest('[data-del-workout]');if(b&&confirm('¿Eliminar esta sesión?')){state.workouts=state.workouts.filter(w=>w.id!==b.dataset.delWorkout);await save();renderGym()}};
+function scoreLabel(n){return n>=90?'Excelente':n>=80?'Bueno':n>=60?'Regular':'Necesita mejorar'}
+$('sleepForm').addEventListener('submit',async e=>{e.preventDefault();let entry={id:uid(),date:$('sleepDate').value,score:Number($('sleepScore').value),hours:Number($('sleepHours').value)||null,quality:$('sleepQuality').value,notes:$('sleepNotes').value.trim()};state.sleep=state.sleep.filter(x=>x.date!==entry.date);state.sleep.push(entry);await save();e.target.reset();$('sleepDate').value=today();renderSleep();renderCalendar()});
+function renderSleep(){let sorted=state.sleep.slice().sort((a,b)=>b.date.localeCompare(a.date)),last=sorted[0];$('latestSleep').className=last?'':'empty';$('latestSleep').innerHTML=last?`<div class="score">${last.score}<small>/100</small></div><div style="text-align:center"><b>${scoreLabel(last.score)}</b><p class="muted">${fmt(last.date)}${last.hours?` · ${last.hours} horas`:''}</p><span class="tag">${esc(last.quality)}</span><p>${esc(last.notes||'')}</p></div>`:'Aún no hay registros.';$('sleepHistory').innerHTML=sorted.slice(0,20).map(x=>`<div class="item row"><div><b>${fmt(x.date)}</b><div class="small">${x.hours?x.hours+' h · ':''}${esc(x.quality)}</div></div><b>${x.score}/100</b></div>`).join('')||'<p class="muted">Sin historial.</p>'}
+function renderHome(){$('todayLine').textContent=new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('homeSupp').textContent=state.supplements.length;$('homeGym').textContent=state.workouts.length;let last=state.sleep.slice().sort((a,b)=>b.date.localeCompare(a.date))[0];$('homeSleep').textContent=last?last.score+'/100':'—';$('homeTakes').innerHTML=state.supplements.slice(0,5).map(s=>`<div class="item"><b>${esc(s.name)}</b><div class="small">${freqText(s)}</div></div>`).join('')||'<p class="muted">Añade tu primer suplemento.</p>';$('homeWorkouts').innerHTML=state.workouts.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4).map(w=>`<div class="item"><b>${fmt(w.date)}</b><div class="small">${w.exercises.length} ejercicios</div></div>`).join('')||'<p class="muted">Registra tu primera sesión.</p>'}
+
+let calCursor=new Date(),calSelected=today();
+function dateObj(v){let [y,m,d]=v.split('-').map(Number);return new Date(y,m-1,d)}
+function isoDate(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function dueCount(s,date){let start=s.startDate||state.takes.filter(t=>t.suppId===s.id).map(t=>t.date).sort()[0]||today();let delta=Math.round((dateObj(date)-dateObj(start))/86400000);if(delta<0)return 0;let every=s.freq==='daily'||s.freq==='twice'?1:s.freq==='every2'?2:s.freq==='every3'?3:s.freq==='weekly'?7:Math.max(1,Number(s.interval)||4);return delta%every===0?(s.freq==='twice'?2:1):0}
+function renderCalendar(){
+ const y=calCursor.getFullYear(),m=calCursor.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,total=new Date(y,m+1,0).getDate();
+ $('calMonth').textContent=first.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+ let cells=[];for(let i=0;i<offset;i++)cells.push('<div></div>');
+ for(let d=1;d<=total;d++){let date=isoDate(new Date(y,m,d)),hasSupp=state.supplements.some(s=>dueCount(s,date)>0),hasGym=state.workouts.some(w=>w.date===date),hasSleep=state.sleep.some(x=>x.date===date);cells.push(`<button class="cal-day ${date.slice(0,7)!==isoDate(new Date(y,m,1)).slice(0,7)?'dim':''} ${date===calSelected?'selected':''} ${date===today()?'today':''}" data-cal-date="${date}"><span class="cal-daynum">${d}</span><span class="cal-dots">${hasSupp?'<i class="cal-dot"></i>':''}${hasGym?'<i class="cal-dot gym"></i>':''}${hasSleep?'<i class="cal-dot sleep"></i>':''}</span></button>`)}
+ $('calendarGrid').innerHTML=cells.join('');renderCalendarDay();
+}
+function renderCalendarDay(){
+ let date=calSelected; $('calSelectedLabel').textContent=dateObj(date).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ let due=state.supplements.map(s=>({s,n:dueCount(s,date)})).filter(x=>x.n>0),takes=state.takes.filter(t=>t.date===date),workouts=state.workouts.filter(w=>w.date===date),sleeps=state.sleep.filter(x=>x.date===date),html='';
+ if(due.length){html+='<h3>Suplementos previstos</h3>';for(let {s,n} of due){let done=takes.filter(t=>t.suppId===s.id).length;html+=`<div class="cal-event"><div class="row"><div><b>${esc(s.name)}</b><div class="small">${esc(s.dose||'')} · ${done}/${n} tomas registradas</div></div><span class="tag">${done>=n?'Completado':done?'Parcial':'Pendiente'}</span></div><div class="actions" style="margin-top:8px">${done<n?`<button class="btn" data-cal-take="${s.id}">Marcar toma</button>`:''}${done?`<button class="btn ghost" data-cal-undo="${s.id}">Deshacer última</button>`:''}</div></div>`}}
+ if(!due.length)html+='<div class="cal-event"><b>Sin suplementos programados</b><div class="small">No hay tomas previstas según las frecuencias configuradas.</div></div>';
+ if(workouts.length){html+='<h3>Entrenamiento</h3>';workouts.forEach(w=>w.exercises.forEach(ex=>html+=`<div class="cal-event"><b>◆ ${esc(ex.name)}</b><div class="small">${ex.sets.map(x=>`${x.weight} kg × ${x.reps}`).join(' · ')}</div></div>`))}
+ if(sleeps.length){html+='<h3>Sueño</h3>';sleeps.forEach(x=>html+=`<div class="cal-event"><b>☾ ${x.score}/100 · ${esc(scoreLabel(x.score))}</b><div class="small">${x.hours?x.hours+' horas · ':''}${esc(x.quality||'')}</div></div>`)}
+ if(!workouts.length&&!sleeps.length)html+='<div class="cal-event small">No hay entrenamiento ni registro de sueño este día. Al guardar uno en sus secciones, aparecerá aquí automáticamente.</div>';
+ $('calDayDetails').innerHTML=html;
+}
+$('calendarGrid').addEventListener('click',e=>{let b=e.target.closest('[data-cal-date]');if(!b)return;calSelected=b.dataset.calDate;calCursor=dateObj(calSelected);renderCalendar()});
+$('calPrev').onclick=()=>{calCursor.setMonth(calCursor.getMonth()-1);renderCalendar()};
+$('calNext').onclick=()=>{calCursor.setMonth(calCursor.getMonth()+1);renderCalendar()};
+$('calDayPrev').onclick=()=>{let d=dateObj(calSelected);d.setDate(d.getDate()-1);calSelected=isoDate(d);calCursor=d;renderCalendar()};
+$('calDayNext').onclick=()=>{let d=dateObj(calSelected);d.setDate(d.getDate()+1);calSelected=isoDate(d);calCursor=d;renderCalendar()};
+$('calDayDetails').addEventListener('click',async e=>{let b=e.target.closest('[data-cal-take],[data-cal-undo]');if(!b)return;let id=b.dataset.calTake||b.dataset.calUndo,s=state.supplements.find(x=>x.id===id);if(b.dataset.calTake){state.takes.push({id:uid(),suppId:id,name:s.name,date:calSelected,time:new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})})}else{let ix=state.takes.map((t,i)=>({t,i})).filter(x=>x.t.suppId===id&&x.t.date===calSelected).pop();if(ix)state.takes.splice(ix.i,1)}await save();renderSupp();renderCalendar();});
+
+function applyStyle(){let s=state.style||{};document.documentElement.style.setProperty('--overlay',(Number(s.overlay??45)/100));document.documentElement.style.setProperty('--card-alpha',Number(s.card??88)/100);document.documentElement.style.setProperty('--panel',`rgba(25,34,51,${Number(s.card??88)/100})`);document.documentElement.style.setProperty('--accent',s.accent||'#7c9cff');document.documentElement.style.setProperty('--wallpaper',s.wallpaper?`url("${s.wallpaper}")`:'none');$('overlayRange').value=s.overlay??45;$('cardRange').value=s.card??88;$('accentColor').value=s.accent||'#7c9cff'}
+async function updateStyle(){state.style={...state.style,overlay:Number($('overlayRange').value),card:Number($('cardRange').value),accent:$('accentColor').value};applyStyle();await save()}
+$('overlayRange').oninput=updateStyle;$('cardRange').oninput=updateStyle;$('accentColor').oninput=updateStyle;
+$('wallpaperFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;if(f.size>6*1024*1024){alert('Elige una imagen de menos de 6 MB para evitar llenar el almacenamiento.');return}let reader=new FileReader();reader.onload=async()=>{state.style.wallpaper=reader.result;applyStyle();await save()};reader.readAsDataURL(f)};
+$('removeWallpaper').onclick=async()=>{state.style.wallpaper=null;applyStyle();await save()};
+$('resetStyle').onclick=async()=>{state.style={overlay:45,card:88,accent:'#7c9cff',wallpaper:null};applyStyle();await save()};
+$('exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify({app:'MY LIFE TRACKER',version:1,exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`my-life-tracker-${today()}.json`;a.click();URL.revokeObjectURL(a.href)};
+$('importBtn').onclick=()=>{let f=$('importFile').files[0];if(!f){alert('Selecciona un archivo JSON.');return}let r=new FileReader();r.onload=async()=>{try{let obj=JSON.parse(r.result),d=obj.data||obj;if(!d||!Array.isArray(d.supplements)||!Array.isArray(d.workouts)||!Array.isArray(d.sleep))throw Error();if(!confirm('Esto sustituirá los datos actuales. ¿Continuar?'))return;state={supplements:d.supplements||[],takes:d.takes||[],workouts:d.workouts||[],sleep:d.sleep||[],style:d.style||{overlay:45,card:88,accent:'#7c9cff',wallpaper:null}};await save();refresh();alert('Copia restaurada correctamente.')}catch(e){alert('El archivo no parece una copia válida de MY LIFE TRACKER.')}};r.readAsText(f)};
+$('clearAll').onclick=async()=>{if(confirm('¿Seguro que quieres borrar TODOS tus datos? Esta acción no se puede deshacer.')){state={supplements:[],takes:[],workouts:[],sleep:[],style:{overlay:45,card:88,accent:'#7c9cff',wallpaper:null}};await save();refresh()}};
+async function refresh(){renderSupp();renderGym();renderSleep();renderHome();renderCalendar();applyStyle();$('storageInfo').textContent=`Registros: ${state.supplements.length} suplementos · ${state.takes.length} tomas · ${state.workouts.length} sesiones · ${state.sleep.length} noches.`}
+async function init(){db=await openDB();let old=await dbGet();if(old)state={...state,...old};$('gymDate').value=today();$('sleepDate').value=today();renderExercises();await refresh();if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(console.warn)}
+init().catch(e=>{console.error(e);alert('No se pudo iniciar el almacenamiento local. Prueba con un navegador actualizado.')});
+</script>
+</body></html>
